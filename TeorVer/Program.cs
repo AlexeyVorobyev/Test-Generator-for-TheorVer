@@ -72,9 +72,7 @@ namespace TeorVer
                 {
                     answersMatrix.Add(new List<char>());
                     paragraph = doc.Paragraphs.Add(); paragraph.Range.Font.Size = 12;
-                    paragraph.Range.Text = "ФИО Студента__________________  Группа_________"+ "\n";
-                    paragraph = doc.Paragraphs.Add(); paragraph.Range.Font.Size = 12;
-                    paragraph.Range.Text = "Вариант " + (i + 1) + ":"  + "\n";
+                    paragraph.Range.Text = "Вариант " + (i + 1) + "    ФИО Студента__________________    Группа_________" + "\n";
 
                     for (int j = 0; j < theoryJSONDesirealized.types.Count; j++)
                     {
@@ -100,8 +98,6 @@ namespace TeorVer
                         paragraph = doc.Paragraphs.Add(); paragraph.Range.Font.Size = 12;
                         paragraph.Range.Text = "Варианты ответа:\n";
                         
-
-
                         if (task.displaySetting == 1)
                         {
                             if (task.imagesSource != null)
@@ -145,7 +141,6 @@ namespace TeorVer
                                     Word.Table tableA = doc.Tables.Add(paragraph.Range, 2, 4);
                                     tableA.BottomPadding = 0;
                                     int k = 1;
-                                    Console.WriteLine("ha");
                                     while (usedVariants.Length != task.answers.Count)
                                     {
                                         int randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
@@ -186,23 +181,113 @@ namespace TeorVer
                                     while (usedVariants.Contains(randomSecond.ToString())) randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
                                     if (randomSecond == 0) answersMatrix[i].Add((char)signUnicodeNum);
                                     usedVariants += randomSecond.ToString();
-                                    if (task.answers[randomSecond] == "source")
-                                    {
-                                        tableA.Cell(1, k).Range.Text = (char)signUnicodeNum + ":";
-
-                                        string pathImg = "";
-
-                                        foreach (List<object> elem in task.imagesSource.answer) if (Convert.ToInt32(elem[0]) == randomSecond) pathImg = Convert.ToString(elem[1]);
-
-
-                                        Word.InlineShape inlineShape = tableA.Cell(1, k).Range.InlineShapes.AddPicture(Path.GetFullPath(@pathImg.Replace("\\\\", "\\")));
-                                    }
-                                    else
-                                    {
-                                        tableA.Cell(1, k).Range.Text = (char)signUnicodeNum + ": " + task.answers[randomSecond];
-                                    }
+                                    tableA.Cell(1, k).Range.Text = (char)signUnicodeNum + ": " + task.answers[randomSecond];
                                     signUnicodeNum++;
                                     k++;
+                                }
+                            }
+                        }
+                        else if (task.displaySetting == 2)
+                        {
+                            if (task.imagesSource != null)
+                            {
+                                if (task.imagesSource.answer == null)
+                                {
+                                    paragraph = doc.Paragraphs.Add(); paragraph.Range.Font.Size = 12;
+
+                                    Word.Table tableA = doc.Tables.Add(paragraph.Range, 2, 2);
+                                    tableA.BottomPadding = 0;
+                                    int k = 1,l = 1;
+                                    while (usedVariants.Length != task.answers.Count)
+                                    {
+                                        int randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
+                                        while (usedVariants.Contains(randomSecond.ToString())) randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
+                                        if (randomSecond == 0) answersMatrix[i].Add((char)signUnicodeNum);
+                                        usedVariants += randomSecond.ToString();
+                                        if (task.answers[randomSecond] == "source")
+                                        {
+                                            tableA.Cell(l, k).Range.Text = (char)signUnicodeNum + ":";
+
+                                            string pathImg = "";
+
+                                            foreach (List<object> elem in task.imagesSource.answer) if (Convert.ToInt32(elem[0]) == randomSecond) pathImg = Convert.ToString(elem[1]);
+
+
+                                            Word.InlineShape inlineShape = tableA.Cell(l, k).Range.InlineShapes.AddPicture(Path.GetFullPath(@pathImg.Replace("\\\\", "\\")));
+                                        }
+                                        else
+                                        {
+                                            tableA.Cell(1, k).Range.Text = (char)signUnicodeNum + ": " + task.answers[randomSecond];
+                                        }
+                                        signUnicodeNum++;
+                                        k++;
+                                        if (k == 3)
+                                        {
+                                            l = 2;
+                                            k = 1;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    paragraph = doc.Paragraphs.Add(); paragraph.Range.Font.Size = 12;
+
+                                    Word.Table tableA = doc.Tables.Add(paragraph.Range, 4, 2);
+                                    tableA.BottomPadding = 0;
+                                    int k = 1,l = 1;
+                                    while (usedVariants.Length != task.answers.Count)
+                                    {
+                                        int randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
+                                        while (usedVariants.Contains(randomSecond.ToString())) randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
+                                        if (randomSecond == 0) answersMatrix[i].Add((char)signUnicodeNum);
+                                        usedVariants += randomSecond.ToString();
+                                        if (task.answers[randomSecond] == "source")
+                                        {
+                                            tableA.Cell(l, k).Range.Text = (char)signUnicodeNum + ":";
+
+                                            string pathImg = "";
+
+                                            foreach (List<object> elem in task.imagesSource.answer) if (Convert.ToInt32(elem[0]) == randomSecond) pathImg = Convert.ToString(elem[1]);
+
+
+                                            Word.InlineShape inlineShape = tableA.Cell(l+1, k).Range.InlineShapes.AddPicture(Path.GetFullPath(@pathImg.Replace("\\\\", "\\")));
+                                        }
+                                        else
+                                        {
+                                            tableA.Cell(1, k).Range.Text = (char)signUnicodeNum + ": ";
+                                            tableA.Cell(2, k).Range.Text = task.answers[randomSecond];
+                                        }
+                                        signUnicodeNum++;
+                                        k++;
+                                        if (k == 3)
+                                        {
+                                            l = 3;
+                                            k = 1;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                paragraph = doc.Paragraphs.Add(); paragraph.Range.Font.Size = 12;
+
+                                Word.Table tableA = doc.Tables.Add(paragraph.Range, 2, 2);
+                                tableA.BottomPadding = 0;
+                                int k = 1,l=1;
+                                while (usedVariants.Length != task.answers.Count)
+                                {
+                                    int randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
+                                    while (usedVariants.Contains(randomSecond.ToString())) randomSecond = rnd.Next(1, task.answers.Count + 1) - 1;
+                                    if (randomSecond == 0) answersMatrix[i].Add((char)signUnicodeNum);
+                                    usedVariants += randomSecond.ToString();
+                                    tableA.Cell(l, k).Range.Text = (char)signUnicodeNum + ": " + task.answers[randomSecond];
+                                    signUnicodeNum++;
+                                    k++;
+                                    if (k == 3)
+                                    {
+                                        l = 2;
+                                        k = 1;
+                                    }
                                 }
                             }
                         }
