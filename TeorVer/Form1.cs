@@ -73,7 +73,7 @@ namespace TeorVer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Воробьев А.Д. - разработка архитектуры, программирование \nШемякин Н.П. - создание теста, наполнение JSON", "О создателях", MessageBoxButtons.OK);
+            MessageBox.Show("Воробьев А.Д. - Разработка архитектуры приложения, \nпрограммирование. \n\nКалайдина Г.В. - Постановка задачи. Разработка математических \nмоделей. Тестирование программы. \n\nШемякин Н.П. - Формирование вариантов задач, \nнаписание  исходного кода программы.", "О создателях", MessageBoxButtons.OK);
         }
 
         private void button2_Click(object sender, EventArgs e)
